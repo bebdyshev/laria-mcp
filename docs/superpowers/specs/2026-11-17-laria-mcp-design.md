@@ -1,21 +1,21 @@
-# caduceuspy — Design Spec
+# laria_mcp — Design Spec
 
 **Date:** 2026-11-17 · **Due:** 2026-11-22 23:59 · **Team:** group27 (cs1302a)
 
 ## 1. Summary
 
-`caduceuspy` turns a Jupyter notebook into an MCP (Model Context Protocol) server, so AI agents
+`laria_mcp` turns a Jupyter notebook into an MCP (Model Context Protocol) server, so AI agents
 such as Hermes, Claude Code or Claude Desktop can call the notebook's functions as typed tools.
 
-The caduceus is the staff of Hermes, messenger of the gods. Hermes Agent is our demo client.
+Hermes Agent is our reference client.
 
-- Install: `pip install caduceuspy`
-- Import: `import caduceuspy` (the import name `caduceus` belongs to an unrelated PyPI package)
-- CLI: `caduceus serve analysis.ipynb`
-- Notebook magic: `%load_ext caduceuspy` then `%caduceus serve`
+- Install: `pip install laria-mcp`
+- Import: `import laria_mcp`
+- CLI: `laria serve analysis.ipynb`
+- Notebook magic: `%load_ext laria_mcp` then `%laria serve`
 
 **The package itself contains no LLM and makes no LLM calls.** The LLM lives in the MCP client
-(the agent). caduceuspy is a server only.
+(the agent). laria_mcp is a server only.
 
 ## 2. Motivation and positioning
 
@@ -25,16 +25,16 @@ The caduceus is the staff of Hermes, messenger of the gods. Hermes Agent is our 
 | jupyter-server-mcp | Registers `module:function` strings from server config | Not notebook-native; needs config files and importable modules |
 | marimo `--mcp` | Turns a marimo notebook into an MCP server | marimo only, not Jupyter |
 
-Pitch: *marimo has this; Jupyter, which most people use, doesn't. caduceuspy adds it, plus live-kernel
+Pitch: *marimo has this; Jupyter, which most people use, doesn't. laria_mcp adds it, plus live-kernel
 serving, hot reload, object handles and human approval.*
 
 ## 3. Features (all in scope)
 
-1. **CLI mode**: `caduceus serve <notebook>` executes the notebook and serves its tools over
+1. **CLI mode**: `laria serve <notebook>` executes the notebook and serves its tools over
    `stdio` (default) or HTTP (`--http --port N`).
-2. **Live kernel mode**: `%caduceus serve [--port N] [--approve] [--token T]` serves tools from the
+2. **Live kernel mode**: `%laria serve [--port N] [--approve] [--token T]` serves tools from the
    *running* kernel over HTTP on `127.0.0.1`. Tools see live state (loaded data, trained models).
-   Also `%caduceus stop` and `%caduceus status`.
+   Also `%laria stop` and `%laria status`.
 3. **Call-log widget**: every agent call appears in the notebook: tool name, arguments, duration,
    result preview, error if any.
 4. **Hot reload**: after each executed cell, tools are rediscovered; if the set or any signature
@@ -48,15 +48,15 @@ serving, hot reload, object handles and human approval.*
    by the stored object before the call.
 7. **Approval mode**: with `--approve`, each call shows Approve / Deny buttons in the notebook and
    blocks until clicked (timeout configurable, default 60 s, timeout = deny).
-8. **Hermes integration**: `%caduceus serve` prints a ready-to-paste `mcp_servers` YAML block;
-   `caduceus hermes-config <notebook> [--live --port N]` writes it into `~/.hermes/config.yaml`
+8. **Hermes integration**: `%laria serve` prints a ready-to-paste `mcp_servers` YAML block;
+   `laria hermes-config <notebook> [--live --port N]` writes it into `~/.hermes/config.yaml`
    (creates a `.bak` first).
 
 ## 4. Tool discovery rules
 
 - Candidates: top-level `def` functions defined in notebook code cells (found by `ast`).
 - Exposed by default: names not starting with `_`.
-- If any function is marked with the `@caduceuspy.tool` decorator or a `# @tool` comment on the
+- If any function is marked with the `@laria_mcp.tool` decorator or a `# @tool` comment on the
   line above it, **only** marked functions are exposed.
 - Tool description = docstring (first paragraph; full docstring kept in description).
 - Input schema = generated from type hints by the MCP SDK (`FastMCP`). Missing hints → `Any`.
@@ -66,7 +66,7 @@ serving, hot reload, object handles and human approval.*
 
 ## 5. Architecture
 
-Package layout `src/caduceuspy/`:
+Package layout `src/laria_mcp/`:
 
 | Module | Responsibility | Depends on |
 |---|---|---|
@@ -75,11 +75,11 @@ Package layout `src/caduceuspy/`:
 | `results.py` | Convert return values to MCP content: DataFrame → markdown table, matplotlib Figure → PNG image, str/number/dict/list → text/JSON; large or non-serializable objects → handle + `repr()` preview (capped at 4000 chars) | handles |
 | `handles.py` | `HandleStore`: `put(obj) -> "type#id"`, `get(handle)`, `resolve_args(kwargs)` | — |
 | `server.py` | `build_server(registry, *, approve_hook, log_hook) -> FastMCP`; run `stdio` or streamable HTTP; optional bearer token; serializes calls with a lock | mcp, results, handles |
-| `magic.py` | IPython extension: `%caduceus` magic, server on background thread, wires hooks to widgets | server, discovery, widget, hotreload |
+| `magic.py` | IPython extension: `%laria` magic, server on background thread, wires hooks to widgets | server, discovery, widget, hotreload |
 | `hotreload.py` | `post_run_cell` hook → rediscover from `user_ns` → diff → update registry → emit `tools/list_changed` | discovery, server |
 | `widget.py` | `CallLog` and `ApprovalPrompt` (ipywidgets) | ipywidgets |
 | `notebook_tool.py` | Build the `run_<name>` tool: inject params, execute copy with `nbclient`, collect outputs | nbclient, results |
-| `cli.py` | `caduceus serve`, `caduceus hermes-config` | everything above |
+| `cli.py` | `laria serve`, `laria hermes-config` | everything above |
 
 **Data flow (live mode):** agent → HTTP → `server.py` → (approval hook → widget) → resolve handles
 → call function under run lock → `results.py` → MCP response; log hook → `CallLog` widget.
@@ -100,19 +100,19 @@ Package layout `src/caduceuspy/`:
 | Unknown handle in arguments | Error result `Unknown handle 'df#xxxx'`. |
 | Approval denied or timed out | Error result `Call denied by user` / `Approval timed out`. |
 | Whole-notebook run exceeds timeout | Per-cell timeout (default 600 s) stops the run; error result names the timeout. Generated Hermes config sets `timeout` to 630 s. |
-| Port in use | `%caduceus serve` reports it and suggests `--port`. |
+| Port in use | `%laria serve` reports it and suggests `--port`. |
 
 ## 7. Environments and demo
 
 - **Laptop:** local Jupyter + local Hermes. CLI mode via `command:`; live mode via `url:`.
-- **Course JupyterHub:** Hermes is preinstalled in the pod. Run `%caduceus serve` in a notebook,
+- **Course JupyterHub:** Hermes is preinstalled in the pod. Run `%laria serve` in a notebook,
   open a pod terminal, Hermes connects to `http://127.0.0.1:<port>/mcp`.
 - **Requirements:** Python ≥ 3.10. Dependencies: `mcp>=1.20,<2` (1.x `FastMCP`; 2.x renamed it and
   the hub/Hermes use 1.x), `nbformat`, `nbclient`, `ipywidgets`, `ipython`, `pyyaml`. Optional extras: `pandas`, `matplotlib` (handled if present, not required).
-- **Day-1 checks on JupyterHub:** `pip install caduceuspy` has no conflicts; record Hermes version;
+- **Day-1 checks on JupyterHub:** `pip install laria-mcp` has no conflicts; record Hermes version;
   test whether Hermes honours `tools/list_changed` (fallback: `/reload-mcp`).
 
-**60-second demo (one beat per member):** open notebook → `%caduceus serve` → paste config into
+**60-second demo (one beat per member):** open notebook → `%laria serve` → paste config into
 Hermes → ask a data question → call appears in the call-log widget → edit a function and rerun →
 Hermes uses the new version → whole-notebook report tool → approval mode deny → close.
 
@@ -141,8 +141,8 @@ Everyone writes tests for their own module and commits daily.
 
 | Day | Date | Milestone |
 |---|---|---|
-| 1 | Nov 18 | loader + discovery + server + `caduceus serve` (stdio) working; **v0.1.0 on PyPI**; repo homepage set; JupyterHub install check |
-| 2 | Nov 19 | results + handles; `%caduceus serve` live mode over HTTP |
+| 1 | Nov 18 | loader + discovery + server + `laria serve` (stdio) working; **v0.1.0 on PyPI**; repo homepage set; JupyterHub install check |
+| 2 | Nov 19 | results + handles; `%laria serve` live mode over HTTP |
 | 3 | Nov 20 | hot reload; call-log widget; approval mode |
 | 4 | Nov 21 | whole-notebook tool; `hermes-config`; docs site live |
 | 5 | Nov 22 | JupyterHub end-to-end test; final release; demo rehearsal; submit |
