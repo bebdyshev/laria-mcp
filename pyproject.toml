@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "laria-mcp"
+dynamic = ["version"]
+description = "Serve a Jupyter notebook's functions as MCP tools for AI agents such as Hermes and Claude."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "group27 (cs1302a)" }]
+keywords = ["jupyter", "notebook", "mcp", "model-context-protocol", "agents", "hermes", "llm-tools"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: Jupyter",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "mcp>=1.20,<2",
+    "nbformat>=5.9",
+    "nbclient>=0.10",
+    "ipython>=8.12",
+    "ipywidgets>=8",
+    "pyyaml>=6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ipykernel>=6", "pandas>=2", "numpy>=1.24", "matplotlib>=3.7", "httpx>=0.27"]
+
+[project.urls]
+Homepage = "https://github.com/bebdyshev/cs1302a-project"
+Documentation = "https://bebdyshev.github.io/cs1302a-project/"
+Issues = "https://github.com/bebdyshev/cs1302a-project/issues"
+
+[project.scripts]
+laria = "laria_mcp.cli:main"
+
+[tool.hatch.version]
+path = "src/laria_mcp/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/laria_mcp"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
