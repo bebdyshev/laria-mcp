@@ -1,5 +1,4 @@
-"""TO BE REVIEWED"""
-
+# TO BE REVIEWED
 """Execute a notebook file headlessly and return its namespace."""
 
 from __future__ import annotations

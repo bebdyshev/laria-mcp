@@ -20,4 +20,17 @@ def tool(fn: F) -> F:
     return fn
 
 
+def load_ipython_extension(ipython: Any) -> None:
+    """Enable `%laria` via `%load_ext laria_mcp`."""
+    from laria_mcp.magic import load_ipython_extension as _load
+
+    _load(ipython)
+
+
+def unload_ipython_extension(ipython: Any) -> None:
+    from laria_mcp.magic import unload_ipython_extension as _unload
+
+    _unload(ipython)
+
+
 __all__ = ["TOOL_MARKER", "__version__", "tool"]

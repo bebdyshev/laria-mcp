@@ -6,3 +6,4 @@ build/
 .pytest_cache/
 docs/_build/
 .ipynb_checkpoints/
+.DS_Store
