@@ -35,9 +35,9 @@ dependencies = [
 dev = ["pytest>=8", "ipykernel>=6", "pandas>=2", "numpy>=1.24", "matplotlib>=3.7", "httpx>=0.27"]
 
 [project.urls]
-Homepage = "https://github.com/bebdyshev/cs1302a-project"
+Homepage = "https://github.com/bebdyshev/laria-mcp"
 Documentation = "https://bebdyshev.github.io/cs1302a-project/"
-Issues = "https://github.com/bebdyshev/cs1302a-project/issues"
+Issues = "https://github.com/bebdyshev/laria-mcp/issues"
 
 [project.scripts]
 laria = "laria_mcp.cli:main"

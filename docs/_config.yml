@@ -3,7 +3,7 @@ author: group27 (cs1302a)
 execute:
   execute_notebooks: "off"
 repository:
-  url: https://github.com/bebdyshev/cs1302a-project
+  url: https://github.com/bebdyshev/laria-mcp
   path_to_book: docs
   branch: main
 html:
