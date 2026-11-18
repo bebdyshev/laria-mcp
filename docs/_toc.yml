@@ -1,0 +1,9 @@
+format: jb-book
+root: intro
+chapters:
+  - file: quickstart
+  - file: live-mode
+  - file: features
+  - file: hermes
+  - file: jupyterhub
+  - file: comparison
