@@ -36,7 +36,7 @@ dev = ["pytest>=8", "ipykernel>=6", "pandas>=2", "numpy>=1.24", "matplotlib>=3.7
 
 [project.urls]
 Homepage = "https://github.com/bebdyshev/laria-mcp"
-Documentation = "https://bebdyshev.github.io/cs1302a-project/"
+Documentation = "https://bebdyshev.github.io/laria-mcp/"
 Issues = "https://github.com/bebdyshev/laria-mcp/issues"
 
 [project.scripts]

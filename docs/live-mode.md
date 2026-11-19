@@ -4,7 +4,7 @@ Live mode serves the functions of the notebook you are running, so agents use th
 
 ```python
 %load_ext laria_mcp
-%caduceus serve
+%laria serve
 ```
 
 Commands:
