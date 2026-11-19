@@ -31,8 +31,6 @@ def _is_marked(node: ast.FunctionDef, lines: list[str]) -> bool:    # returns bo
         previous = lines[first_line - 2].replace(" ", "")       # Ignore spaces
         if previous == "#@tool":        # if the previous line is the comment marker "#@tool"
             return True
-        if previous == "#@xtool":       # if the previous line is the comment marker "#@xtool"
-            return "Exclude"
     return False    # no marker matched
 
 
@@ -40,7 +38,6 @@ def _defined_functions(sources: Iterable[str]) -> tuple[list[str], set[str]]:
     names: list[str] = []
     nameset: set[str] = set()
     marked: set[str] = set()
-    exclude: set[str] = set()
     for source in sources:
         try:
             tree = ast.parse(source)
@@ -52,11 +49,9 @@ def _defined_functions(sources: Iterable[str]) -> tuple[list[str], set[str]]:
                 if node.name not in nameset:
                     names.append(node.name)
                     nameset.add(node.name)
-                if (mark := _is_marked(node, lines)) == True:
+                if _is_marked(node, lines):
                     marked.add(node.name)
-                elif mark == "Exclude":
-                    exclude.add(node.name)
-    return names, marked, exclude
+    return names, marked
 
 
 def discover(sources: Iterable[str], namespace: Mapping[str, Any]) -> list[ToolSpec]:
