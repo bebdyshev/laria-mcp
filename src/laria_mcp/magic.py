@@ -145,7 +145,7 @@ class LariaMagics(Magics):
         if self.session is None:
             print("Not serving.")
             return
-        tools = ", ".join(self.session.server.tool_names)
+        tools = ", ".join(self.session.server.tool_names) or "(none)"
         print(f"serving at {self.session.url}: {tools}")
 
 
