@@ -58,3 +58,10 @@ def test_detect_notebook(tmp_path):
     assert detect_notebook({"__session__": str(nb)}) == nb
     assert detect_notebook({"__session__": str(tmp_path / "missing.ipynb")}) is None
     assert detect_notebook({}) is None
+
+
+def test_stop_and_status_when_not_serving(shell, capsys):
+    shell.run_line_magic("laria", "status")
+    assert "Not serving." in capsys.readouterr().out
+    shell.run_line_magic("laria", "stop")
+    assert "Not serving." in capsys.readouterr().out
