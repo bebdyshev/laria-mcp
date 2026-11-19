@@ -10,6 +10,6 @@ In a notebook:
     %load_ext laria_mcp
     %laria serve
 
-Full documentation: https://bebdyshev.github.io/cs1302a-project/
+Full documentation: https://bebdyshev.github.io/laria-mcp/
 
 Team group27 (cs1302a). Licensed under the MIT License.

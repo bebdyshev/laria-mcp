@@ -40,8 +40,8 @@ Options:
 ## Try the demo notebook
 
 ```bash
-python examples/make_examples.py   # writes examples/sales_demo.ipynb
 laria serve examples/sales_demo.ipynb
 ```
 
 The demo exposes `top_customers`, `orders_for`, `summarize`, `revenue_chart`, and `run_sales_demo`.
+To regenerate the notebook from source, run `python examples/make_examples.py`.
