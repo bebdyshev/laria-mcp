@@ -11,10 +11,17 @@ import ipywidgets as widgets
 from laria_mcp.server import CallEvent
 
 _ICONS = {"ok": "✅", "error": "❌", "denied": "🚫", "pending": "⏳"}
+_MAX_ARG = 80
+_MAX_DETAIL = 300
+
+
+def _short(value: object) -> str:
+    text = repr(value)
+    return text if len(text) <= _MAX_ARG else text[: _MAX_ARG - 1] + "…"
 
 
 def _call_text(event: CallEvent) -> str:
-    args = ", ".join(f"{key}={value!r}" for key, value in event.args.items())
+    args = ", ".join(f"{key}={_short(value)}" for key, value in event.args.items())
     return f"{event.tool}({args})"
 
 
@@ -37,7 +44,9 @@ class CallLog:
     @staticmethod
     def format_event(event: CallEvent) -> str:
         icon = _ICONS.get(event.status, "•")
-        detail = (event.error or event.preview)[:300]
+        detail = event.error or event.preview or ""
+        if len(detail) > _MAX_DETAIL:
+            detail = detail[:_MAX_DETAIL] + "…"
         return (
             f"<code>{icon} {html.escape(_call_text(event))}</code> "
             f"<span style='color:gray'>{event.duration_ms:.0f} ms</span>"
@@ -49,6 +58,7 @@ class CallLog:
 
     def request_approval(self, event: CallEvent, timeout: float = 60.0) -> Optional[bool]:
         done = threading.Event()
+        guard = threading.Lock()
         decision: dict[str, bool] = {}
         label = widgets.HTML(f"🤖 Agent wants to call <code>{html.escape(_call_text(event))}</code>")
         approve = widgets.Button(description="Approve", button_style="success")
@@ -56,18 +66,21 @@ class CallLog:
 
         def choose(value: bool):
             def handler(_button: widgets.Button) -> None:
-                if not done.is_set():
-                    decision["value"] = value
-                    done.set()
+                with guard:
+                    if not done.is_set():
+                        decision["value"] = value
+                        done.set()
 
             return handler
 
         approve.on_click(choose(True))
         deny.on_click(choose(False))
         self._append(widgets.HBox([label, approve, deny]))
-        finished = done.wait(timeout)
+        done.wait(timeout)
+        with guard:
+            done.set()  # close the door: clicks after this point are ignored
+            result = decision.get("value")
         approve.disabled = True
         deny.disabled = True
-        result = decision.get("value") if finished else None
         label.value += {True: " — approved", False: " — denied", None: " — timed out"}[result]
         return result
