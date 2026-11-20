@@ -30,6 +30,15 @@ def test_error_rows_show_error_text():
     assert "ValueError" in CallLog.format_event(event(status="error", error="ValueError: bad"))
 
 
+def test_long_args_are_shortened():
+    out = CallLog.format_event(event(args={"q": "x" * 500}))
+    assert len(out) < 1000 and "…" in out
+
+
+def test_long_preview_is_marked_truncated():
+    assert "…" in CallLog.format_event(event(preview="y" * 500))
+
+
 def click_later(log, index, delay=0.1):
     def run():
         time.sleep(delay)
