@@ -52,7 +52,8 @@ class LiveSession:
         self.reloader = HotReloader(shell, self.server, self.specs, on_change=self._on_tools_changed)
 
     def _on_tools_changed(self, names: list[str]) -> None:
-        self.log.set_status(f"serving {len(names)} tools at {self.url} (updated: {', '.join(names)})")
+        tools=", ".join(names) or "(none)"
+        self.log.set_status(f"serving {len(names)} tools at {self.url} (updated: {tools})")
 
     def specs(self) -> list[ToolSpec]:
         specs = discover(self.shell.user_ns.get("In", []), self.shell.user_ns)
