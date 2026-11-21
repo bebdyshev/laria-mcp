@@ -7,3 +7,4 @@ chapters:
   - file: hermes
   - file: jupyterhub
   - file: comparison
+  - file: demo-script

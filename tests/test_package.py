@@ -2,7 +2,7 @@ import laria_mcp
 
 
 def test_version_is_set():
-    assert laria_mcp.__version__ == "0.1.0"
+    assert laria_mcp.__version__ == "0.1.1"
 
 
 def test_tool_decorator_marks_and_returns_same_function():

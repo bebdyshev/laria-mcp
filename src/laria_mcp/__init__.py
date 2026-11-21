@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Callable, TypeVar
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 TOOL_MARKER = "__laria_tool__"
 
