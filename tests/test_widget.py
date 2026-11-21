@@ -17,6 +17,16 @@ def test_status_header():
     assert "serving 3 tools" in log.header.value
 
 
+def test_default_status_is_not_serving():
+    assert "not serving" in CallLog().header.value
+
+
+def test_status_header_is_escaped():
+    log = CallLog()
+    log.set_status("<b>x</b>")
+    assert "&lt;b&gt;" in log.header.value
+
+
 def test_record_appends_escaped_rows_and_trims():
     log = CallLog(max_rows=2)
     for i in range(3):
@@ -26,8 +36,31 @@ def test_record_appends_escaped_rows_and_trims():
     assert "top_customers(n=3)" in html and "&lt;script&gt;" in html and "12 ms" in html
 
 
+def test_max_rows_one_keeps_only_latest():
+    log = CallLog(max_rows=1)
+    log.record(event(args={"n": 1}))
+    log.record(event(args={"n": 2}))
+    assert len(log.rows.children) == 1
+    assert "n=2" in log.rows.children[0].value
+
+
 def test_error_rows_show_error_text():
     assert "ValueError" in CallLog.format_event(event(status="error", error="ValueError: bad"))
+
+
+def test_empty_preview_does_not_crash():
+    out = CallLog.format_event(event(preview=""))
+    assert "top_customers(n=3)" in out
+
+
+def test_non_string_args_are_shown_with_repr():
+    out = CallLog.format_event(event(args={"n": 3, "flag": True, "x": None, "ids": [1, 2]}))
+    assert "flag=True" in out and "x=None" in out and "ids=[1, 2]" in out
+
+
+def test_denied_and_pending_status_icons():
+    assert "🚫" in CallLog.format_event(event(status="denied"))
+    assert "⏳" in CallLog.format_event(event(status="pending"))
 
 
 def test_long_args_are_shortened():
