@@ -130,7 +130,8 @@ class LariaMagics(Magics):
         self.session = session
         timeout = args.notebook_timeout + 30 if session.notebook_spec else None
         entry = hermes.http_entry(url, token=args.token, timeout=timeout)
-        print(f"Serving {len(session.server.tool_names)} tools: {', '.join(session.server.tool_names)}")
+        tools=', '.join(session.server.tool_names) or "(none)"
+        print(f"Serving {len(session.server.tool_names)} tools: {tools}")
         print("Add this to ~/.hermes/config.yaml, then run /reload-mcp in Hermes:\n")
         print(hermes.to_yaml(name, entry))
 
