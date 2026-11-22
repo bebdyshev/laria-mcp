@@ -67,6 +67,10 @@ Notebooks hold the functions and data that people actually work with, but AI age
 * **Live or offline.** Serve a notebook from a running Jupyter kernel with `%laria serve`, or run the notebook headlessly with `laria serve`.
 * **Safe by default.** The live server listens only on `127.0.0.1`, requires a bearer token, and can ask for approval on each call.
 
+<div align="center">
+  <img src="images/architecture.svg" alt="Notebook functions are exposed by laria-mcp to an AI agent" width="800">
+</div>
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -138,7 +142,54 @@ def top_customers(n: int = 5, region: str = "EU"):
 
 Then restart the agent so it loads the new server. Example questions: *"find top 5 US customers from sales_demo"*.
 
+When a tool returns a matplotlib figure, the agent receives it as a PNG. For example, `revenue_chart(region="US")` from the demo notebook returns:
+
+<div align="center">
+  <img src="images/revenue_chart.png" alt="US revenue by month, produced by revenue_chart" width="600">
+</div>
+
 A complete example notebook is in [`examples/sales_demo.ipynb`](examples/sales_demo.ipynb). For more examples, see the [documentation](https://bebdyshev.github.io/laria-mcp/).
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- USE CASES -->
+## Use Cases
+
+The screenshots below come from the demo notebook (`examples/sales_demo.ipynb`), run locally with Hermes as the agent.
+
+### Ask for a chart
+
+The agent calls `revenue_chart`, receives the figure as an image, and describes it.
+
+<div align="center">
+  <img src="images/usecase-chart.png" alt="Hermes calls revenue_chart for EU and summarizes the chart" width="800">
+</div>
+
+### Chain tools through a handle
+
+`orders_for` returns a large result as a handle (`df#…`) instead of pasting the rows. The agent passes that handle to `summarize`, so the data never has to fit in the conversation.
+
+<div align="center">
+  <img src="images/usecase-chain.png" alt="Hermes calls orders_for, gets a handle, then calls summarize on it" width="800">
+</div>
+
+### Run the whole notebook with parameters
+
+A cell tagged `parameters` turns the notebook into a tool. The agent passes new values and gets the result of the full run back.
+
+<div align="center">
+  <img src="images/usecase-run-notebook.png" alt="Hermes calls run_sales_demo with region=US and year=2026" width="800">
+</div>
+
+### Call the tools from your own code
+
+Any MCP client can use the same server. A small notebook can connect over HTTP with the token and call a tool directly.
+
+<div align="center">
+  <img src="images/hermes-calls-mcp.png" alt="Notebook client code next to the Hermes tool call" width="800">
+</div>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

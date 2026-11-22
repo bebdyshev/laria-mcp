@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="300" viewBox="0 0 880 300" font-family="-apple-system, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#555"/>
+    </marker>
+  </defs>
+  <rect width="880" height="300" fill="#ffffff"/>
+
+  <!-- Notebook -->
+  <rect x="20" y="70" width="220" height="150" rx="10" fill="#f5f7fb" stroke="#4a6fa5" stroke-width="2"/>
+  <text x="130" y="105" text-anchor="middle" font-size="17" font-weight="700" fill="#1f2d3d">Jupyter notebook</text>
+  <text x="130" y="131" text-anchor="middle" font-size="13" fill="#444">@laria_mcp.tool</text>
+  <text x="130" y="151" text-anchor="middle" font-size="13" fill="#444">top_customers()</text>
+  <text x="130" y="171" text-anchor="middle" font-size="13" fill="#444">orders_for()</text>
+  <text x="130" y="191" text-anchor="middle" font-size="13" fill="#444">revenue_chart()</text>
+
+  <!-- laria-mcp -->
+  <rect x="330" y="70" width="220" height="150" rx="10" fill="#eef8f1" stroke="#2e8b57" stroke-width="2"/>
+  <text x="440" y="105" text-anchor="middle" font-size="17" font-weight="700" fill="#1f2d3d">laria-mcp</text>
+  <text x="440" y="131" text-anchor="middle" font-size="13" fill="#444">MCP server (stdio or HTTP)</text>
+  <text x="440" y="151" text-anchor="middle" font-size="13" fill="#444">127.0.0.1:8765/mcp</text>
+  <text x="440" y="171" text-anchor="middle" font-size="13" fill="#444">bearer token, call log</text>
+  <text x="440" y="191" text-anchor="middle" font-size="13" fill="#444">DataFrame → table</text>
+
+  <!-- Agent -->
+  <rect x="640" y="70" width="220" height="150" rx="10" fill="#fdf6ec" stroke="#b7791f" stroke-width="2"/>
+  <text x="750" y="105" text-anchor="middle" font-size="17" font-weight="700" fill="#1f2d3d">AI agent</text>
+  <text x="750" y="131" text-anchor="middle" font-size="13" fill="#444">Hermes, Claude, ...</text>
+  <text x="750" y="151" text-anchor="middle" font-size="13" fill="#444">calls tools by name</text>
+  <text x="750" y="171" text-anchor="middle" font-size="13" fill="#444">reads tables and charts</text>
+
+  <!-- Arrows -->
+  <line x1="240" y1="130" x2="326" y2="130" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="554" y1="130" x2="636" y2="130" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="283" y="122" text-anchor="middle" font-size="12" fill="#555">run cell</text>
+  <text x="595" y="122" text-anchor="middle" font-size="12" fill="#555">tool call</text>
+
+  <!-- Return path -->
+  <line x1="636" y1="195" x2="554" y2="195" stroke="#999" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+  <text x="595" y="216" text-anchor="middle" font-size="12" fill="#777">result</text>
+
+  <text x="440" y="265" text-anchor="middle" font-size="13" fill="#555">Your functions stay in the notebook. The agent sees them as tools.</text>
+</svg>
