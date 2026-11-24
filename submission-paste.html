@@ -1,0 +1,60 @@
+<h1 style="margin-bottom:4px;">laria-mcp</h1>
+<p><strong>Group 27, cs1302a.</strong> Team: Kerey, Bibek, Matthias, Vladan, Daniil, Namlahang.</p>
+<p>
+<a href="https://pypi.org/project/laria-mcp/">PyPI</a> |
+<a href="https://github.com/bebdyshev/laria-mcp">Repository</a> |
+<a href="https://bebdyshev.github.io/laria-mcp/">Documentation</a> |
+<a href="https://github.com/bebdyshev/laria-mcp/blob/main/demo/laria-mcp-demo-40s.mp4">40-second demo video</a> |
+<a href="https://github.com/bebdyshev/laria-mcp/blob/main/docs/demo-script.md">60-second demo script</a>
+</p>
+
+<p><a href="https://github.com/bebdyshev/laria-mcp/blob/main/demo/laria-mcp-demo-40s.mp4"><img src="https://raw.githubusercontent.com/bebdyshev/laria-mcp/main/demo/poster.jpg" alt="Demo video: JupyterLab and Hermes working with laria-mcp (click to play)" style="max-width:100%;height:auto;border:1px solid #e3e8ef;border-radius:6px;"></a><br>
+<em>Click the image to play the 40-second narrated demo.</em></p>
+
+<h2 style="border-bottom:1px solid #d8dee9;padding-bottom:4px;">Motivation</h2>
+<p>A Jupyter notebook holds the functions and data people actually work with, but AI agents cannot reach them. Copying results into a chat is slow and loses the code that produced them.</p>
+
+<h2 style="border-bottom:1px solid #d8dee9;padding-bottom:4px;">Innovation</h2>
+<p><strong>laria-mcp</strong> turns a notebook into an <a href="https://modelcontextprotocol.io">Model Context Protocol</a> server. Functions marked with <code>@laria_mcp.tool</code> become tools that an agent such as Hermes can call:</p>
+<ul>
+<li><strong>Live from the kernel:</strong> <code>%laria serve</code> exposes the notebook's current state, so edits and new results are visible to the agent.</li>
+<li><strong>Readable results:</strong> DataFrames come back as tables, matplotlib figures as images, and large results as handles (<code>df#&hellip;</code>) that other tools can use.</li>
+<li><strong>Notebook as a tool:</strong> a cell tagged <code>parameters</code> makes the whole notebook callable with new values.</li>
+<li><strong>Safe by default:</strong> the server listens on <code>127.0.0.1</code>, requires a bearer token, and can ask for approval on each call.</li>
+</ul>
+
+<h2 style="border-bottom:1px solid #d8dee9;padding-bottom:4px;">Installation and usage</h2>
+<pre style="background:#f5f7fb;padding:10px 12px;border-radius:4px;">pip install laria-mcp
+
+# serve a notebook to an agent over stdio
+laria serve analysis.ipynb
+
+# or, inside Jupyter
+%load_ext laria_mcp
+%laria serve --token &lt;random string&gt;</pre>
+<p>Then point the agent at the server. For Hermes, <code>laria hermes-config analysis.ipynb --live --token &lt;string&gt;</code> writes the entry to <code>~/.hermes/config.yaml</code> and keeps a backup of the old file.</p>
+
+<h2 style="border-bottom:1px solid #d8dee9;padding-bottom:4px;">Use cases</h2>
+<p><img src="https://raw.githubusercontent.com/bebdyshev/laria-mcp/main/images/usecase-chart.png" alt="Hermes calls revenue_chart for EU" style="max-width:100%;height:auto;border:1px solid #e3e8ef;border-radius:6px;"><br>
+1. Ask for a chart. The agent calls <code>revenue_chart</code>, receives the image, and describes it.</p>
+<p><img src="https://raw.githubusercontent.com/bebdyshev/laria-mcp/main/images/usecase-chain.png" alt="Hermes chains orders_for and summarize" style="max-width:100%;height:auto;border:1px solid #e3e8ef;border-radius:6px;"><br>
+2. Chain tools. <code>orders_for</code> returns a handle, and <code>summarize</code> reads it without the rows entering the conversation.</p>
+<p><img src="https://raw.githubusercontent.com/bebdyshev/laria-mcp/main/images/usecase-run-notebook.png" alt="Hermes runs the whole notebook with parameters" style="max-width:100%;height:auto;border:1px solid #e3e8ef;border-radius:6px;"><br>
+3. Run the whole notebook with new parameters (<code>run_sales_demo(region="US", year=2026)</code>).</p>
+<p><img src="https://raw.githubusercontent.com/bebdyshev/laria-mcp/main/images/hermes-calls-mcp.png" alt="Notebook client code next to the Hermes tool call" style="max-width:100%;height:auto;border:1px solid #e3e8ef;border-radius:6px;"><br>
+4. Any MCP client can call the same server. Left: client code in a separate notebook. Right: the Hermes CLI calling the tool.</p>
+
+<h2 style="border-bottom:1px solid #d8dee9;padding-bottom:4px;">Architecture</h2>
+<p><img src="https://raw.githubusercontent.com/bebdyshev/laria-mcp/main/images/architecture.svg" alt="Notebook, laria-mcp server and AI agent" style="max-width:100%;height:auto;border:1px solid #e3e8ef;border-radius:6px;"><br>
+Functions stay in the notebook. The agent sees them as tools.</p>
+
+<h2 style="border-bottom:1px solid #d8dee9;padding-bottom:4px;">Testing and status</h2>
+<ul>
+<li>80 tests in CI (Python 3.10, 3.11, 3.12), run on every push to <code>main</code>.</li>
+<li>Published to PyPI as version 0.1.1; installs on the course JupyterHub.</li>
+<li>Verified on a laptop: Hermes calls the notebook's tools and gets the results.</li>
+</ul>
+<p style="background:#fff8e6;border-left:4px solid #d9a400;padding:8px 12px;"><strong>Open item:</strong> on the course JupyterHub the server starts and accepts calls, but the Hermes model installed there does not complete tool calls, so the agent demo was recorded on a laptop.</p>
+
+<h2 style="border-bottom:1px solid #d8dee9;padding-bottom:4px;">Team</h2>
+<p>Group 27: Kerey, Bibek, Matthias, Vladan, Daniil, Namlahang. Licensed under the MIT License.</p>

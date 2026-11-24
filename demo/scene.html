@@ -5,78 +5,78 @@
 <title>laria-mcp demo scene</title>
 <style>
   :root {
-    --teal: #0d9488; --ink: #0f172a; --mute: #5b6b7b; --blue: #0284c7;
-    --orange: #b45309; --red: #dc2626;
+    --teal: #111; --ink: #111; --mute: #8a8a8a; --blue: #111;
+    --orange: #666; --red: #111;
     --mono: ui-monospace, "SF Mono", Menlo, Monaco, monospace;
     --sans: -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 1920px; height: 1080px; overflow: hidden; background: #cfeee8; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: #fafafa; }
   #stage {
     position: relative; width: 1920px; height: 1080px; overflow: hidden;
-    background: linear-gradient(120deg, #c9ede6 0%, #e6f5f6 45%, #c6e3f1 100%);
+    background: #f4f4f4;
     font-family: var(--sans);
   }
   .win {
     position: absolute; top: 48px; height: 892px; background: #fff; border-radius: 22px;
-    border: 1px solid #d3e2e6; overflow: hidden; display: flex; flex-direction: column;
-    box-shadow: 0 30px 70px -28px rgba(13, 80, 90, .45), 0 0 0 10px rgba(255,255,255,.35);
+    border: 1px solid #e4e4e4; overflow: hidden; display: flex; flex-direction: column;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 24px 50px -30px rgba(0,0,0,.22);
   }
   .win::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px;
-    background: linear-gradient(90deg, #2dd4bf, #0284c7); z-index: 5; }
-  .titlebar { height: 56px; flex: none; background: #f1f7f8; border-bottom: 1px solid #e0eaec;
+    background: none; z-index: 5; }
+  .titlebar { height: 56px; flex: none; background: #fafafa; border-bottom: 1px solid #eee;
     display: flex; align-items: center; padding: 0 22px; position: relative; }
   .lights { display: flex; gap: 10px; }
   .lights i { width: 15px; height: 15px; border-radius: 50%; display: block; }
-  .lights i:nth-child(1){background:#ff5f57} .lights i:nth-child(2){background:#febc2e} .lights i:nth-child(3){background:#28c840}
-  .ttitle { position: absolute; left: 0; right: 0; text-align: center; font-size: 17px; color: #334155; pointer-events: none; }
+  .lights i{background:#ddd}
+  .ttitle { position: absolute; left: 0; right: 0; text-align: center; font-size: 17px; color: #555; pointer-events: none; }
   .tstep { margin-left: auto; font-size: 16px; font-weight: 600; color: var(--teal); z-index: 2; }
-  .url { position: absolute; left: 50%; transform: translateX(-50%); width: 420px; height: 32px; border-radius: 9px;
-    background: #e3edef; color: #475569; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .url { position: absolute; left: 50%; transform: translateX(-50%); width: 640px; height: 32px; border-radius: 9px;
+    background: #efefef; color: #666; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
   /* ---------- terminal ---------- */
   #term { left: 1184px; width: 688px; }
   #termbody { flex: 1; padding: 22px 26px; display: flex; flex-direction: column; justify-content: flex-start;
-    overflow: hidden; font-family: var(--mono); font-size: 15.2px; line-height: 23px; color: #475569;
+    overflow: hidden; font-family: var(--mono); font-size: 15.2px; line-height: 23px; color: #555;
     white-space: pre-wrap; word-break: break-word; }
   .pv { color: var(--teal); font-weight: 700; } .pp { color: var(--mute); }
   .cmd { color: var(--ink); font-weight: 700; } .cm { color: var(--mute); }
-  .hb { color: var(--blue); font-weight: 700; } .or { color: var(--orange); } .rd { color: var(--red); }
+  .hb { color: var(--blue); font-weight: 700; } .or { color: var(--orange); } .rd { color: var(--red); font-weight: 700; }
   .gn { color: var(--teal); font-weight: 700; } .dk { color: var(--ink); } .bd { font-weight: 700; color: var(--ink); }
   .cur { display: inline-block; width: 10px; height: 19px; background: var(--teal); vertical-align: -3px; }
-  .rule { border-top: 1px solid #cbd8dc; margin: 8px 0; }
-  .rule.or2 { border-top-color: #e7a64a; }
-  .chartcard { margin: 8px 0 4px; border: 1px solid #d6e3e6; border-radius: 10px; width: 330px; overflow: hidden; background: #fff; }
-  .chartcard img { display: block; width: 100%; }
+  .rule { border-top: 1px solid #e2e2e2; margin: 8px 0; }
+  .rule.or2 { border-top-color: #cfcfcf; }
+  .chartcard { margin: 8px 0 4px; border: 1px solid #e4e4e4; border-radius: 10px; width: 330px; overflow: hidden; background: #fff; }
+  .chartcard img { display: block; width: 100%; filter: grayscale(1) contrast(1.05); }
 
   /* ---------- jupyterlab ---------- */
   #jup { left: 56px; width: 1096px; }
   #jbody { flex: 1; display: flex; min-height: 0; font-family: var(--sans); color: #212121; }
-  .jmenu { height: 30px; flex: none; background: #fff; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center;
-    padding: 0 12px; gap: 18px; font-size: 14px; color: #333; }
-  .jside { width: 46px; flex: none; background: #fafafa; border-right: 1px solid #e0e0e0; display: flex; flex-direction: column; align-items: center; padding-top: 10px; gap: 14px; }
-  .jside span { width: 24px; height: 24px; border-radius: 5px; background: #bdbdbd; opacity: .8; }
-  .jside span.on { background: #616161; }
+  .jmenu { height: 30px; flex: none; background: #fff; border-bottom: 1px solid #eee; display: flex; align-items: center;
+    padding: 0 12px; gap: 18px; font-size: 14px; color: #555; }
+  .jside { width: 46px; flex: none; background: #fafafa; border-right: 1px solid #eee; display: flex; flex-direction: column; align-items: center; padding-top: 10px; gap: 14px; }
+  .jside span { width: 22px; height: 22px; border-radius: 5px; background: #e4e4e4; }
+  .jside span.on { background: #111; }
   .jmain { flex: 1; display: flex; flex-direction: column; min-width: 0; background: #fff; }
-  .jtabs { height: 34px; flex: none; background: #eee; border-bottom: 1px solid #bdbdbd; display: flex; align-items: flex-end; padding-left: 4px; }
-  .jtab { background: #fff; border: 1px solid #bdbdbd; border-bottom: none; border-top: 2px solid #1976d2; padding: 6px 14px; font-size: 13.5px; display: flex; gap: 8px; align-items: center; }
-  .jtab b { color: #f37726; font-weight: 700; }
-  .jtool { height: 40px; flex: none; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; gap: 14px; padding: 0 14px; font-size: 13px; color: #555; }
-  .jtool i { width: 18px; height: 18px; border-radius: 4px; background: #9e9e9e; display: block; opacity: .75; }
+  .jtabs { height: 34px; flex: none; background: #f4f4f4; border-bottom: 1px solid #e4e4e4; display: flex; align-items: flex-end; padding-left: 4px; }
+  .jtab { background: #fff; border: 1px solid #e4e4e4; border-bottom: none; border-top: 2px solid #111; padding: 6px 14px; font-size: 13.5px; display: flex; gap: 8px; align-items: center; }
+  .jtab b { color: #999; font-weight: 700; }
+  .jtool { height: 40px; flex: none; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 14px; padding: 0 14px; font-size: 13px; color: #777; }
+  .jtool i { width: 16px; height: 16px; border-radius: 4px; background: #e0e0e0; display: block; }
   .jtool .sel { border: 1px solid #ccc; padding: 3px 10px; border-radius: 3px; color: #333; }
   .jtool .kern { margin-left: auto; color: #333; }
   .jcells { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-start; padding: 12px 20px 6px 8px; }
   .cell { display: flex; margin-bottom: 8px; border-left: 4px solid transparent; padding-left: 4px; flex: none; }
-  .cell.act { border-left-color: #1976d2; }
-  .prompt { width: 62px; flex: none; text-align: right; padding-right: 10px; font-family: var(--mono); font-size: 13px; color: #307fc1; padding-top: 6px; }
+  .cell.act { border-left-color: #111; }
+  .prompt { width: 62px; flex: none; text-align: right; padding-right: 10px; font-family: var(--mono); font-size: 13px; color: #999; padding-top: 6px; }
   .cbody { flex: 1; min-width: 0; }
-  .cin { background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 2px; padding: 6px 10px; font-family: var(--mono); font-size: 13.4px; line-height: 19px; white-space: pre; color: #212121; overflow: hidden; position: relative; }
-  .cin .tag { position: absolute; right: 8px; top: 6px; font-family: var(--sans); font-size: 11px; background: #e3f2fd; color: #1565c0; border-radius: 9px; padding: 1px 8px; }
+  .cin { background: #f7f7f7; border: 1px solid #ebebeb; border-radius: 2px; padding: 6px 10px; font-family: var(--mono); font-size: 13.4px; line-height: 19px; white-space: pre; color: #212121; overflow: hidden; position: relative; }
+  .cin .tag { position: absolute; right: 8px; top: 6px; font-family: var(--sans); font-size: 11px; background: #eee; color: #555; border-radius: 9px; padding: 1px 8px; }
   .cout { padding: 6px 10px 2px; font-family: var(--mono); font-size: 13px; line-height: 19px; white-space: pre-wrap; color: #212121; }
-  .k { color: #008000; font-weight: 700; } .s { color: #ba2121; } .n { color: #008800; } .c { color: #408080; font-style: italic; }
-  .f { color: #0000ff; } .m { color: #aa22ff; font-weight: 700; }
+  .k { color: #111; font-weight: 700; } .s { color: #777; } .n { color: #444; } .c { color: #aaa; font-style: italic; }
+  .f { color: #111; font-weight: 700; } .m { color: #111; font-weight: 700; }
   .jcur { display: inline-block; width: 2px; height: 16px; background: #212121; vertical-align: -3px; }
-  .jstatus { height: 26px; flex: none; background: #1976d2; color: #fff; font-size: 12.5px; display: flex; align-items: center; padding: 0 14px; gap: 18px; }
+  .jstatus { height: 26px; flex: none; background: #111; color: #ddd; font-size: 12.5px; display: flex; align-items: center; padding: 0 14px; gap: 18px; }
   .jstatus .r { margin-left: auto; }
   /* laria widget panel */
   .lw { font-family: var(--sans); font-size: 13.5px; line-height: 20px; padding: 2px 0 6px; }
@@ -87,12 +87,12 @@
   .lw pre { margin: 0 0 4px 1.5em; white-space: pre-wrap; font-family: var(--mono); font-size: 12.5px; line-height: 17px; }
   .lw .ask { display: flex; align-items: center; gap: 10px; margin: 4px 0 6px; }
   .btn { height: 28px; padding: 0 14px; border-radius: 3px; color: #fff; font-size: 13px; display: inline-flex; align-items: center; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
-  .btn.ok { background: #4caf50; } .btn.no { background: #f44336; }
+  .btn.ok { background: #111; } .btn.no { background: #fff; color: #111; border: 1px solid #bbb; }
   .btn.dis { opacity: .5; box-shadow: none; } .btn.press { filter: brightness(.82); transform: translateY(1px); }
 
   /* ---------- overlays ---------- */
-  #caption { position: absolute; left: 0; right: 0; bottom: 38px; text-align: center; font-size: 30px; font-weight: 600; color: #134e4a; letter-spacing: .1px; }
-  #caption small { display: block; font-size: 20px; font-weight: 500; color: #3f6f73; margin-top: 4px; }
+  #caption { position: absolute; left: 0; right: 0; bottom: 38px; text-align: center; font-size: 30px; font-weight: 600; color: #111; letter-spacing: .1px; }
+  #caption small { display: block; font-size: 20px; font-weight: 500; color: #777; margin-top: 4px; }
   .card { position: absolute; inset: 0; z-index: 30; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
     background: linear-gradient(120deg, #c9ede6 0%, #e6f5f6 45%, #c6e3f1 100%); }
   .card h1 { font-size: 132px; letter-spacing: -3px; color: #0b3b3a; font-family: var(--mono); font-weight: 700; }
@@ -103,19 +103,48 @@
   .card .meta { margin-top: 36px; font-size: 26px; color: #3f6f73; }
   .card .links { margin-top: 20px; font-family: var(--mono); font-size: 24px; color: #0b3b3a; line-height: 1.7; }
   #mouse { position: absolute; width: 26px; height: 34px; z-index: 50; pointer-events: none; filter: drop-shadow(0 3px 4px rgba(0,0,0,.35)); }
+
+  /* ===== authentic JupyterLab (on JupyterHub) ===== */
+  .k { color: #008000; font-weight: 700; } .s { color: #ba2121; } .n { color: #008800; } .c { color: #408080; font-style: italic; }
+  .f { color: #0000ff; } .m { color: #aa22ff; font-weight: 700; }
+  .prompt { color: #307fc1; } .cell.act { border-left-color: #1976d2; }
+  .jtab { border-top-color: #1976d2; border-color: #bdbdbd; } .jtab b { color: #f37726; }
+  .jtabs { background: #eee; border-bottom: 1px solid #bdbdbd; }
+  .jstatus { background: #1976d2; color: #fff; }
+  .btn.ok { background: #4caf50; } .btn.no { background: #f44336; color: #fff; border: none; }
+  .cin { background: #f5f5f5; border-color: #e0e0e0; } .cin .tag { background: #e3f2fd; color: #1565c0; }
+  .jtool { color: #555; } .jtool b { font-weight: 400; font-size: 17px; color: #757575; }
+  .jmenu svg { flex: none; margin-right: 4px; }
+  .jside svg { display: block; }
+  /* ===== dark Apple Terminal + Hermes ===== */
+  #term { background: #1e1e1e; border-color: #2c2c2c; }
+  #term .titlebar { background: #2b2b2b; border-bottom: 1px solid #111; }
+  #term .ttitle { color: #bdbdbd; } #term .tstep { color: #e6e6e6; } #term .lights i { background: #5a5a5a; }
+  #termbody { background: #1e1e1e; color: #e6e6e6; }
+  .pv, .pp { color: #e6e6e6; font-weight: 400; }
+  .zc { color: #5fd75f; } .zs { color: #e5c07b; } .zu { text-decoration: underline; }
+  .hw { color: #f5f5f5; font-weight: 700; } .hg { color: #9a9a9a; } .hk { color: #fdf3c0; }
+  .ho { color: #f0b35a; } .hm { color: #d27de6; }
+  .rule { border-top: 1px solid #6a6a6a; width: 40%; margin: 10px 0; }
+  .rule.or2 { border-top-color: #e8a33d; }
+  .cur { background: #e6e6e6; }
+  #ql { position: absolute; left: 1500px; top: 748px; width: 340px; background: #fff; border-radius: 14px; overflow: hidden; z-index: 20;
+        box-shadow: 0 30px 60px -20px rgba(0,0,0,.55), 0 0 0 1px rgba(0,0,0,.12); display: none; }
+  #ql .qt { background: #f0f0f0; padding: 9px 14px; font-size: 13.5px; color: #555; text-align: center; border-bottom: 1px solid #ddd; }
+  #ql img { display: block; width: 100%; }
 </style>
 </head>
 <body>
 <div id="stage">
   <div class="win" id="jup">
     <div class="titlebar"><div class="lights"><i></i><i></i><i></i></div>
-      <div class="url">🔒 localhost:8888/lab/tree/sales_demo.ipynb</div></div>
-    <div class="jmenu"><span>File</span><span>Edit</span><span>View</span><span>Run</span><span>Kernel</span><span>Tabs</span><span>Settings</span><span>Help</span></div>
+      <div class="url">🔒 jupyterhub.cs1302a.example/user/group27/lab/tree/sales_demo.ipynb</div></div>
+    <div class="jmenu"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M3 9.5C7 5 17 5 21 9.5C17 8 7 8 3 9.5Z" fill="#f37726"/><path d="M3 14.5C7 19 17 19 21 14.5C17 16 7 16 3 14.5Z" fill="#f37726"/><circle cx="18.5" cy="4" r="1.5" fill="#767677"/><circle cx="5.5" cy="20" r="1.5" fill="#767677"/><circle cx="5" cy="5" r="1" fill="#9e9e9e"/></svg><span>File</span><span>Edit</span><span>View</span><span>Run</span><span>Kernel</span><span>Tabs</span><span>Settings</span><span>Help</span></div>
     <div id="jbody">
-      <div class="jside"><span></span><span class="on"></span><span></span><span></span><span></span></div>
+      <div class="jside"><span style="background:#616161;border-radius:4px;display:block;padding:0;width:30px;height:30px;display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M3 6h7l2 2h9v11H3z" fill="none" stroke="#fff" stroke-width="1.6"/></svg></span><span style="background:none;width:auto;height:auto"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="#757575" stroke-width="1.6"/><rect x="9" y="9" width="6" height="6" fill="#757575"/></svg></span><span style="background:none;width:auto;height:auto"><svg width="24" height="24" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2" fill="none" stroke="#757575" stroke-width="1.6"/><path d="M4 9h16" stroke="#757575" stroke-width="1.6"/></svg></span><span style="background:none;width:auto;height:auto"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="#757575" stroke-width="1.6"/><circle cx="12" cy="12" r="8" fill="none" stroke="#757575" stroke-width="1.6" stroke-dasharray="3 2.5"/></svg></span><span style="background:none;width:auto;height:auto"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M5 5h6v4h2V5h6v6h-4v2h4v6h-6v-4h-2v4H5z" fill="none" stroke="#757575" stroke-width="1.5"/></svg></span></div>
       <div class="jmain">
         <div class="jtabs"><div class="jtab"><b>●</b> sales_demo.ipynb</div></div>
-        <div class="jtool"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><span class="sel">Code ▾</span><span class="kern">Python 3 (ipykernel) ○</span></div>
+        <div class="jtool"><b>💾</b><b>＋</b><b>✂</b><b>⧉</b><b>▶</b><b>■</b><b>↻</b><b>⏭</b><span class="sel">Code ▾</span><span class="kern">Python 3 (ipykernel) ○</span></div>
         <div class="jcells" id="jcells"></div>
       </div>
     </div>
@@ -124,10 +153,11 @@
 
   <div class="win" id="term">
     <div class="titlebar"><div class="lights"><i></i><i></i><i></i></div>
-      <div class="ttitle">laria-mcp — (.venv) zsh</div><div class="tstep" id="tstep"></div></div>
+      <div class="ttitle">laria-mcp — zsh — 80×24</div><div class="tstep" id="tstep"></div></div>
     <div id="termbody"></div>
   </div>
 
+  <div id="ql"><div class="qt">img_5f040a72119a.png</div><img src="eu_chart.png"></div>
   <div id="caption"></div>
   <div class="card" id="intro">
     <h1>laria<em>-mcp</em></h1>
@@ -186,133 +216,117 @@ const STEPS = [
 const END = 59.0, TOTAL = 63.0;
 
 /* ------------------------------------------------------------------ terminal script */
-// Each entry: [time, html] appears at time; function entries receive t for typing.
+
+function zsh(cmd) {
+  const m = cmd.match(/^(\S+)([\s\S]*)$/);
+  if (!m) return esc(cmd);
+  const parts = m[2].split(/("[^"]*"?)/);
+  return '<span class="zc">' + esc(m[1]) + '</span>' + parts.map((p, i) => i % 2 === 1
+    ? '<span class="zs">' + esc(p) + '</span>'
+    : esc(p).replace(/(\S+\.ipynb)/g, '<span class="zu">$1</span>')).join('');
+}
+const hlq = q => esc(q).replace(/\b([a-z_]+)=(\w+)/g, '<span class="ho">$1=</span><span class="hm">$2</span>');
+
 function terminalLines(t) {
   const out = [];
   const add = (t0, html) => { if (t >= t0) out.push(html); };
-  const prompt = '<span class="pv">(.venv)</span> <span class="pp">laria %</span> ';
+  const prompt = '<span class="pp">(.venv) laria-mcp % </span>';
   const cursor = '<span class="cur"></span>';
-  const clearAt = (t0, t1) => (t >= t0 && t < t1);   // helper unused
-
-  // ---- step 1: install
+  const typeCmd = (t0, cmd, cps) => {
+    if (t < t0) return false;
+    const shown = typed(t, t0, cmd, cps);
+    const done = shown.length === cmd.length;
+    out.push(prompt + zsh(shown) + (done ? '' : cursor));
+    return done;
+  };
   if (t < 7.2) {
-    add(3.3, '<span class="cm"># Step 1 — install from PyPI</span>');
-    if (t >= 3.6) {
-      const cmd = 'pip install laria-mcp';
-      const shown = typed(t, 3.6, cmd, 24);
-      const done = shown.length === cmd.length;
-      out.push(prompt + '<span class="cmd">' + esc(shown) + '</span>' + (done ? '' : cursor));
-    }
-    add(4.7, '<span class="cm">Collecting laria-mcp</span>');
-    add(5.2, '<span class="cm">  Downloading laria_mcp-0.1.1-py3-none-any.whl</span>');
-    add(5.8, '<span class="gn">Successfully installed laria-mcp-0.1.1</span>');
-    add(6.2, '');
+    typeCmd(3.6, 'pip install laria-mcp', 24);
+    add(4.7, '<span class="hg">Collecting laria-mcp</span>');
+    add(5.2, '<span class="hg">  Downloading laria_mcp-0.1.1-py3-none-any.whl</span>');
+    add(5.8, 'Successfully installed laria-mcp-0.1.1');
     add(6.2, prompt + cursor);
     return out;
   }
-  // ---- step 2: configure hermes
   if (t < 15.4) {
-    add(7.3, '<span class="cm"># Step 2 — tell Hermes where the notebook server lives</span>');
-    if (t >= 10.8) {
-      const cmd = 'laria hermes-config sales_demo.ipynb --live --port 8765 --token demo123';
-      const shown = typed(t, 10.8, cmd, 34);
-      const done = shown.length === cmd.length;
-      out.push(prompt + '<span class="cmd">' + esc(shown) + '</span>' + (done ? '' : cursor));
-    }
+    typeCmd(7.4, '', 1); // empty prompt line placeholder removed below
+    out.pop();
+    const done = typeCmd(10.8, 'laria hermes-config sales_demo.ipynb --live --port 8765 --token demo123', 34);
     add(13.2, "laria: added 'sales_demo' to ~/.hermes/config.yaml. In Hermes run /reload-mcp (or restart Hermes).");
-    add(14.2, '');
     add(14.2, prompt + cursor);
     return out;
   }
-  // ---- step 3..6: hermes queries
-  const rule = '<div class="rule"></div>';
-  const rule2 = '<div class="rule or2"></div>';
-  const query = (t0, text, hi) => {
-    if (t < t0) return false;
-    const shown = typed(t, t0, text, 90);
-    let h = esc(shown);
-    hi.forEach(([w, cls]) => { h = h.replace(esc(w), '<span class="' + cls + '">' + esc(w) + '</span>'); });
-    out.push('<span class="cm"># ' + STEP_COMMENT(t0) + '</span>');
-    out.push('Query: ' + h);
-    return shown.length === text.length;
-  };
-  const STEP_COMMENT = t0 => ({ 15.6: 'Step 3 — ask a data question', 27.0: 'Step 4 — chain two tools', 38.4: 'Step 5 — ask for a chart (we will deny it first)', 43.4: 'Same question again — this time approve', 50.4: 'Step 6 — re-run the whole notebook with new parameters' })[t0] || '';
-
-  const block = (qt, qtext, hi, o) => {
-    // o: { think, tools:[[appear, label, doneAt, dur]], resultAt, result:[html...], done }
+  const rule = '<div class="rule"></div>', rule2 = '<div class="rule or2"></div>';
+  const hk = h => '<span class="hk">' + h + '</span>';
+  const block = (qt, q, o) => {
     if (t < qt) return;
-    const doneTyping = query(qt, qtext, hi);
-    if (!doneTyping) return;
-    const base = qt + qtext.length / 90;
-    add(base + .3, rule);
-    add(base + .4, '<span class="cm">' + o.think + '</span>');
-    add(base + .7, '');
-    add(base + .7, '<span class="cm">∴ Thought for 0s</span>');
-    add(base + .8, rule);
-    add(base + .9, '');
+    const cmd = 'hermes chat -q "' + q + '"';
+    if (!typeCmd(qt, cmd, 140)) return;
+    const base = qt + cmd.length / 140 + 0.2;
+    add(base, '');
+    add(base, '<span class="hw">Query:</span> ' + hlq(q));
+    add(base + .2, rule);
+    add(base + .3, '<span class="hg">' + o.think + '</span>');
+    add(base + .4, '');
+    add(base + .4, '<span class="hg">∴ Thought for 0s</span>');
+    add(base + .5, rule);
+    add(base + .6, '');
     o.tools.forEach(([ap, label, doneAt, dur]) => {
-      if (t >= ap) {
-        const fin = t >= doneAt;
-        const spin = '⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'[Math.floor(t * 10) % 10];
-        out.push('<span class="bd">' + label + '</span>' + (fin ? (dur ? '  <span class="cm">' + dur + '</span>' : '') : '  <span class="cm">' + spin + '</span>'));
-      }
+      if (t < ap) return;
+      const spin = '⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'[Math.floor(t * 10) % 10];
+      out.push('<span class="hw">' + label + '</span>' + (t >= doneAt ? (dur ? '  <span class="hg">' + dur + '</span>' : '') : '  <span class="hg">' + spin + '</span>'));
     });
     if (t >= o.resultAt) {
       out.push('');
       out.push(rule2);
-      out.push('<span class="cm">☤ Hermes</span>');
-      o.result.forEach(l => out.push(l));
-      if (o.image) out.push('<div class="chartcard"><img src="eu_chart.png"></div>');
+      out.push('<span class="hg">☤ Hermes</span>');
+      o.result.forEach(l => out.push(hk(l)));
       out.push(rule2);
-      out.push('<span class="or">🎉</span> <span class="cm">' + o.done + '</span>');
+      out.push(hk('🎉 ' + o.done));
+      out.push(''); out.push('');
+      out.push('Duration:       ' + o.dur);
+      out.push('Messages:       ' + o.msgs);
     }
   };
-  const result = h => '<span class="dk">' + h + '</span>';
-
-  // scenes: show only the current scene's block (terminal "clear" between scenes)
   if (t < 26.6) {
     block(15.6, 'Use the sales_demo MCP tool top_customers with n=3 and region=US. Show the tool call and the result.',
-      [['US', 'rd'], ['n=3', 'or']],
       { think: "I'll call the sales_demo tool top_customers now.",
         tools: [[19.4, '🔌 Sales Demo · top customers', 22.0, '']], resultAt: 22.2,
-        result: [result('Tool call:'), '', result('    mcp__sales_demo__top_customers(n=3, region="US")'), '',
-          result('Result:'), result('      customer    amount'), result('    2    Hooli  38289.73'), result('    3  Initech  33732.34'), result('    1   Globex  33339.25')],
-        done: 'Conversation completed after 3 OpenAI-compatible API call(s)' });
+        result: ['Tool call:', '', '    mcp__sales_demo__top_customers(n=3, region="US")', '', 'Result:',
+          '      customer    amount', '    2    Hooli  38289.73', '    3  Initech  33732.34', '    1   Globex  33339.25'],
+        done: 'Conversation completed after 3 OpenAI-compatible API call(s)', dur: '10s', msgs: '6 (1 user, 4 tool calls)' });
   } else if (t < 38.0) {
     block(27.0, 'Use the sales_demo MCP tool orders_for with region=APAC and min_amount=500. Then call summarize on the handle it returns.',
-      [['APAC', 'rd'], ['min_amount=500', 'or']],
       { think: "I'm calling the sales_demo tools now.",
         tools: [[29.0, '🔌 Sales Demo · orders for', 30.9, ''], [31.8, '🔌 Sales Demo · summarize', 33.7, '']], resultAt: 34.4,
-        result: [result('1) orders_for(region="APAC", min_amount=500)'),
-          result('   → DataFrame: 112 rows × 4 columns (customer, region, month, amount). Handle: df#a7d5'), '',
-          result('2) summarize(df="df#a7d5")'), result('   → { "orders": 112, "total": 75099.67, "mean": 670.53 }'), '',
-          result('So in APAC there are 112 orders ≥ $500, totaling $75,099.67, averaging $670.53 per order.')],
-        done: 'Conversation completed after 4 OpenAI-compatible API call(s)' });
+        result: ['Tool calls and results:', '', '1) orders_for(region="APAC", min_amount=500)',
+          '   → DataFrame: 112 rows × 4 columns (customer, region, month, amount). Handle: df#a7d5', '',
+          '2) summarize(df="df#a7d5")', '   → { "orders": 112, "total": 75099.67, "mean": 670.53 }', '',
+          'So in APAC there are 112 orders ≥ $500, totaling $75,099.67, averaging $670.53 per order.'],
+        done: 'Conversation completed after 4 OpenAI-compatible API call(s)', dur: '11s', msgs: '8 (1 user, 6 tool calls)' });
   } else if (t < 43.2) {
     block(38.4, 'Use the sales_demo MCP tool revenue_chart with region=EU and show me the chart summary.',
-      [['EU', 'rd']],
       { think: 'I need to call the revenue_chart tool from the sales_demo set.',
         tools: [[40.0, '🔌 Sales Demo · revenue chart', 42.0, '']], resultAt: 42.1,
-        result: [result('Result: <span class="rd">Call denied by user</span>'), result('The call was not approved, so no chart was produced.')],
-        done: 'Conversation completed after 3 OpenAI-compatible API call(s)' });
+        result: ['Result: Call denied by user', 'The call was not approved, so no chart was produced.'],
+        done: 'Conversation completed after 3 OpenAI-compatible API call(s)', dur: '9s', msgs: '6 (1 user, 4 tool calls)' });
   } else if (t < 50.0) {
     block(43.4, 'Use the sales_demo MCP tool revenue_chart with region=EU and show me the chart summary.',
-      [['EU', 'rd']],
       { think: 'I need to call the revenue_chart tool from the sales_demo set.',
-        tools: [[45.0, '🔌 Sales Demo · revenue chart', 47.0, '0.1s']], resultAt: 47.2, image: true,
-        result: [result('Chart summary ("EU revenue by month", bar chart, 12 months):'),
-          result('  - Peak: month 3 (~20.9k), followed by month 1 (~19.5k)'),
-          result('  - Trough: month 6 (~12.3k), with month 2 close behind (~12.8k)')],
-        done: 'Conversation completed after 3 OpenAI-compatible API call(s)' });
+        tools: [[45.0, '🔌 Sales Demo · revenue chart', 47.0, '0.1s']], resultAt: 47.2,
+        result: ['Tool call:', '  mcp__sales_demo__revenue_chart(region="EU")', '',
+          'Chart saved to: ~/.hermes/cache/images/img_5f040a72119a.png',
+          'Chart summary ("EU revenue by month", bar chart, 12 months):',
+          '  - Peak: month 3 (~20.9k), followed by month 1 (~19.5k)',
+          '  - Trough: month 6 (~12.3k), with month 2 close behind (~12.8k)'],
+        done: 'Conversation completed after 3 OpenAI-compatible API call(s)', dur: '10s', msgs: '6 (1 user, 4 tool calls)' });
   } else {
     block(50.4, 'Use the sales_demo MCP tool run_sales_demo with region=US and year=2026. Show the tool call and the result.',
-      [['US', 'rd'], ['year=2026', 'or']],
-      { think: 'I need to describe what I\'m doing and then make the tool call.',
+      { think: "I need to describe what I'm doing and then make the tool call.",
         tools: [[52.0, '📖 Reading tool details · 1 tool', 52.4, ''], [52.4, '🔌 Sales Demo · run sales demo', 55.4, '2.0s']], resultAt: 55.6,
-        result: [result('Tool call:'), '', result('    mcp__sales_demo__run_sales_demo(region="US", year=2026)'), '',
-          result('Result:    US 2026: 661 orders, total 190,755.09'), result('      customer    amount'),
-          result('    2    Hooli  38289.73'), result('    3  Initech  33732.34'), result('    1   Globex  33339.25')],
-        done: 'Conversation completed after 3 OpenAI-compatible API call(s)' });
+        result: ['Tool call:', '', '    mcp__sales_demo__run_sales_demo(region="US", year=2026)', '',
+          'Result:    US 2026: 661 orders, total 190,755.09', '      customer    amount',
+          '    2    Hooli  38289.73', '    3  Initech  33732.34', '    1   Globex  33339.25'],
+        done: 'Conversation completed after 3 OpenAI-compatible API call(s)', dur: '10s', msgs: '6 (1 user, 4 tool calls)' });
   }
   return out;
 }
@@ -331,16 +345,16 @@ const hl = {
 function lawidget(t) {
   const started = t >= 10.2;
   if (!started) return '';
-  let h = '<div class="lw"><div class="hd"><b>☤ laria</b> — serving 5 tools at ' + URL_ + '</div>';
+  let h = '<div class="lw"><div class="hd"><b>laria</b> — serving 5 tools at ' + URL_ + '</div>';
   CALLS.forEach(c => {
     if (t < c.ask) return;
     const clicked = t >= c.click;
     const btnOk = '<span class="btn ok' + (clicked ? ' dis' : '') + (clicked && t < c.click + .15 && c.kind === 'ok' ? ' press' : '') + '" data-btn="ok-' + c.id + '">Approve</span>';
     const btnNo = '<span class="btn no' + (clicked ? ' dis' : '') + (clicked && t < c.click + .15 && c.kind === 'no' ? ' press' : '') + '" data-btn="no-' + c.id + '">Deny</span>';
     const verdict = clicked ? (c.kind === 'ok' ? ' — approved' : ' — denied') : '';
-    h += '<div class="ask"><span>🤖 Agent wants to call <code>' + esc(c.call) + '</code>' + verdict + '</span>' + btnOk + btnNo + '</div>';
+    h += '<div class="ask"><span>Agent wants to call <code>' + esc(c.call) + '</code>' + verdict + '</span>' + btnOk + btnNo + '</div>';
     if (t >= c.click + RESULT_DELAY) {
-      const icon = c.kind === 'ok' ? '✅' : '🚫';
+      const icon = c.kind === 'ok' ? '✓' : '✕';
       h += '<div class="row"><code>' + icon + ' ' + esc(c.call) + '</code> <span class="dur">' + c.ms + ' ms</span><pre>' + esc(c.prev) + '</pre></div>';
     }
   });
@@ -392,7 +406,7 @@ function render(t) {
   // step label + caption
   let step = STEPS[0];
   STEPS.forEach(s => { if (t >= s[0]) step = s; });
-  const showCap = t >= 3.2 && t < END;
+  const showCap = t >= 3.0;
   $('tstep').textContent = showCap ? step[1] : '';
   $('caption').innerHTML = showCap ? step[2] + '<small>' + step[3] + '</small>' : '';
   $('jmode').textContent = 'Python 3 (ipykernel) | ' + ((t >= 9.8 && t < 10.2) ? 'Busy' : 'Idle');
@@ -400,10 +414,11 @@ function render(t) {
   // overlays
   const intro = $('intro'), outro = $('outro');
   intro.style.opacity = t < 2.6 ? 1 : clamp(1 - (t - 2.6) / 0.6);
-  intro.style.display = t < 3.3 ? 'flex' : 'none';
+  intro.style.display = 'none';
   outro.style.opacity = clamp((t - END) / 0.7);
-  outro.style.display = t >= END ? 'flex' : 'none';
+  outro.style.display = 'none';
 
+  $('ql').style.display = (t >= 47.4 && t < 51.0) ? 'block' : 'none';
   // mouse
   const mouse = $('mouse');
   let target = null, from = null, p = 0, vis = false;
