@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>laria-mcp — group 27 (cs1302a)</title>
+<style>
+  :root {
+    --teal: #0d9488; --ink: #0f172a; --mute: #5b6b7b; --blue: #0284c7; --deep: #0b3b3a;
+    --line: #d3e2e6; --card: #ffffff; --soft: #f1f7f8;
+    --mono: ui-monospace, "SF Mono", Menlo, Monaco, monospace;
+    --sans: -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; font-family: var(--sans); color: var(--ink); line-height: 1.55;
+    background: linear-gradient(120deg, #c9ede6 0%, #e6f5f6 45%, #c6e3f1 100%) fixed; min-height: 100vh;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px 72px; }
+
+  /* nav */
+  nav { position: sticky; top: 0; z-index: 10; backdrop-filter: blur(10px); background: rgba(230, 245, 246, .8); border-bottom: 1px solid var(--line); }
+  nav .in { max-width: 1120px; margin: 0 auto; padding: 10px 16px; display: flex; gap: 20px; align-items: center; overflow-x: auto; white-space: nowrap; font-size: 15px; }
+  nav b { font-family: var(--mono); color: var(--deep); margin-right: auto; }
+  nav a { color: #2f5557; text-decoration: none; font-weight: 500; }
+  nav a:hover { color: var(--teal); }
+
+  /* hero */
+  .hero { text-align: center; padding: 64px 0 32px; }
+  .hero h1 { font-family: var(--mono); font-size: clamp(48px, 9vw, 112px); letter-spacing: -.04em; margin: 0; color: var(--deep); line-height: 1; }
+  .hero h1 em { font-style: normal; color: var(--teal); }
+  .hero .tag { font-size: clamp(18px, 2.6vw, 28px); color: #2f5557; max-width: 860px; margin: 18px auto 0; }
+  .pill { display: inline-block; margin-top: 28px; font-family: var(--mono); font-size: clamp(16px, 2.4vw, 24px); background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 12px 24px; box-shadow: 0 18px 40px -22px rgba(13, 80, 90, .5); }
+  .pill b { color: var(--teal); }
+  .meta { margin-top: 18px; color: #3f6f73; font-size: 17px; }
+  .links { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .links a { text-decoration: none; background: var(--deep); color: #fff; padding: 9px 18px; border-radius: 999px; font-weight: 600; font-size: 15px; }
+  .links a.alt { background: #fff; color: var(--deep); border: 1px solid var(--line); }
+  .links a:hover { background: var(--teal); color: #fff; }
+
+  /* window card */
+  .win { background: var(--card); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; position: relative;
+         box-shadow: 0 30px 70px -32px rgba(13, 80, 90, .45), 0 0 0 8px rgba(255, 255, 255, .35); }
+  .win::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: linear-gradient(90deg, #2dd4bf, #0284c7); }
+  .bar { display: flex; align-items: center; gap: 8px; padding: 14px 20px; background: var(--soft); border-bottom: 1px solid #e0eaec; font-size: 14px; color: #334155; }
+  .bar i { width: 13px; height: 13px; border-radius: 50%; display: block; }
+  .bar i:nth-child(1) { background: #ff5f57; } .bar i:nth-child(2) { background: #febc2e; } .bar i:nth-child(3) { background: #28c840; }
+  .bar span { margin-left: 8px; } .bar em { margin-left: auto; font-style: normal; font-weight: 600; color: var(--teal); font-size: 13px; }
+  .body { padding: 24px 28px; }
+  video { display: block; width: 100%; height: auto; background: #0f172a; }
+  .vnote { font-size: 13.5px; color: var(--mute); padding: 10px 20px 14px; background: #fff; }
+
+  /* sections */
+  section { margin-top: 56px; scroll-margin-top: 70px; }
+  .kick { font-family: var(--mono); font-size: 14px; color: var(--teal); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  h2 { font-size: clamp(28px, 4vw, 44px); letter-spacing: -.02em; margin: 4px 0 14px; color: var(--deep); line-height: 1.15; }
+  p.lead { font-size: clamp(17px, 2vw, 21px); color: #234; max-width: 860px; margin: 0 0 8px; }
+  code { font-family: var(--mono); background: #e8f1f3; border-radius: 5px; padding: 1px 6px; font-size: .92em; }
+  a { color: var(--blue); }
+
+  .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-top: 22px; }
+  .feat { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 20px; }
+  .feat .n { font-family: var(--mono); color: var(--teal); font-weight: 700; font-size: 14px; }
+  .feat h3 { margin: 6px 0 6px; font-size: 19px; color: var(--deep); }
+  .feat p { margin: 0; color: #334155; font-size: 15.5px; }
+
+  pre { margin: 0; padding: 22px 28px; font-family: var(--mono); font-size: 15.5px; line-height: 1.7; overflow-x: auto; background: #fff; color: var(--ink); }
+  pre code { background: none; padding: 0; font-size: inherit; }
+  .cm { color: var(--mute); } .pv { color: var(--teal); font-weight: 700; } .cmd { font-weight: 700; }
+
+  .uc { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); margin-top: 22px; }
+  .uc figure { margin: 0; }
+  .uc img { display: block; width: 100%; height: auto; background: #1e1e1e; }
+  .uc figcaption { padding: 14px 20px 18px; font-size: 15.5px; color: #234; }
+  .uc figcaption b { color: var(--deep); }
+
+  .arch img { display: block; width: 100%; height: auto; background: #fff; padding: 12px; }
+  .arch p { margin: 0; padding: 4px 24px 18px; color: #234; }
+
+  .stats { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-top: 18px; }
+  .stat { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 16px 20px; }
+  .stat b { display: block; font-family: var(--mono); font-size: 30px; color: var(--teal); line-height: 1.1; }
+  .stat span { color: #334155; font-size: 14.5px; }
+  .note { background: #fff8e6; border-left: 4px solid #d9a400; padding: 12px 16px; border-radius: 10px; margin-top: 18px; font-size: 15.5px; }
+
+  .team { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .team span { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 8px 18px; font-weight: 600; color: var(--deep); }
+  footer { text-align: center; color: #3f6f73; margin-top: 56px; font-size: 14.5px; }
+
+  @media (max-width: 600px) {
+    .body { padding: 18px; } pre { padding: 16px 18px; font-size: 14px; } .hero { padding-top: 40px; }
+  }
+  @media print { nav { display: none; } body { background: #fff; } .win { box-shadow: none; } }
+</style>
+</head>
+<body>
+
+<nav><div class="in">
+  <b>laria-mcp</b>
+  <a href="#demo">Demo</a><a href="#why">Why</a><a href="#install">Install</a><a href="#cases">Use cases</a><a href="#arch">Architecture</a><a href="#status">Status</a><a href="#team">Team</a>
+</div></nav>
+
+<div class="wrap">
+
+<header class="hero">
+  <h1>laria<em>-mcp</em></h1>
+  <p class="tag">Turn a Jupyter notebook into an MCP server, so AI agents can call its functions as tools.</p>
+  <div class="pill"><b>$</b> pip install laria-mcp</div>
+  <div class="meta"><strong>Group 27 · cs1302a</strong> — Kerey, Bibek, Matthias, Vladan, Daniil, Namlahang</div>
+  <div class="links">
+    <a href="https://pypi.org/project/laria-mcp/">PyPI</a>
+    <a href="https://github.com/bebdyshev/laria-mcp">Repository</a>
+    <a href="https://bebdyshev.github.io/laria-mcp/">Documentation</a>
+    <a class="alt" href="https://github.com/bebdyshev/laria-mcp/blob/main/docs/demo-script.md">60-second demo script</a>
+  </div>
+</header>
+
+<section id="demo" style="margin-top:24px">
+  <div class="win">
+    <div class="bar"><i></i><i></i><i></i><span>laria-mcp — demo</span><em>63 s</em></div>
+    <video controls preload="metadata" poster="demo/poster.jpg" src="demo/laria-mcp-demo.mp4"></video>
+    <div class="vnote">Scripted walkthrough: JupyterLab on the left, the agent's terminal on the right. Tool results are the real ones from our laptop runs with Hermes. Call durations in the notebook panel are illustrative.</div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="kick">Motivation</div>
+  <h2>Agents cannot reach the code in your notebook</h2>
+  <p class="lead">A Jupyter notebook holds the functions and data people actually work with, but AI agents cannot reach them. Copying results into a chat is slow and loses the code that produced them.</p>
+
+  <div class="kick" style="margin-top:36px">Innovation</div>
+  <h2>The notebook serves the agent</h2>
+  <p class="lead"><strong>laria-mcp</strong> turns a notebook into an <a href="https://modelcontextprotocol.io">Model Context Protocol</a> server. Functions marked with <code>@laria_mcp.tool</code> become tools that an agent such as Hermes can call.</p>
+  <div class="grid">
+    <div class="feat"><div class="n">01</div><h3>Live from the kernel</h3><p><code>%laria serve</code> exposes the notebook's current state, so edits and new results are visible to the agent.</p></div>
+    <div class="feat"><div class="n">02</div><h3>Readable results</h3><p>DataFrames come back as tables, matplotlib figures as images, and large results as handles (<code>df#…</code>) that other tools can use.</p></div>
+    <div class="feat"><div class="n">03</div><h3>Notebook as a tool</h3><p>A cell tagged <code>parameters</code> makes the whole notebook callable with new values.</p></div>
+    <div class="feat"><div class="n">04</div><h3>Safe by default</h3><p>The server listens on <code>127.0.0.1</code>, requires a bearer token, and can ask for approval on each call.</p></div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="kick">Setup</div>
+  <h2>Installation and usage</h2>
+  <div class="win">
+    <div class="bar"><i></i><i></i><i></i><span>laria — (.venv) zsh</span><em>Quick start</em></div>
+<pre><code><span class="pv">$</span> <span class="cmd">pip install laria-mcp</span>
+
+<span class="cm"># serve a notebook to an agent over stdio</span>
+<span class="pv">$</span> <span class="cmd">laria serve analysis.ipynb</span>
+
+<span class="cm"># or, inside Jupyter</span>
+<span class="cmd">%load_ext laria_mcp</span>
+<span class="cmd">%laria serve --token &lt;random string&gt;</span></code></pre>
+  </div>
+  <p class="lead" style="margin-top:16px">Then point the agent at the server. For Hermes, <code>laria hermes-config analysis.ipynb --live --token &lt;string&gt;</code> writes the entry to <code>~/.hermes/config.yaml</code> and keeps a backup of the old file.</p>
+</section>
+
+<section id="cases">
+  <div class="kick">Use cases</div>
+  <h2>What an agent can do with a notebook</h2>
+  <div class="uc">
+    <figure class="win">
+      <div class="bar"><i></i><i></i><i></i><span>Hermes</span><em>1 · Chart</em></div>
+      <img src="images/usecase-chart.png" alt="Hermes calls revenue_chart for EU">
+      <figcaption><b>Ask for a chart.</b> The agent calls <code>revenue_chart</code>, receives the image, and describes it.</figcaption>
+    </figure>
+    <figure class="win">
+      <div class="bar"><i></i><i></i><i></i><span>Hermes</span><em>2 · Chain</em></div>
+      <img src="images/usecase-chain.png" alt="Hermes chains orders_for and summarize">
+      <figcaption><b>Chain tools.</b> <code>orders_for</code> returns a handle, and <code>summarize</code> reads it without the rows entering the conversation.</figcaption>
+    </figure>
+    <figure class="win">
+      <div class="bar"><i></i><i></i><i></i><span>Hermes</span><em>3 · Notebook</em></div>
+      <img src="images/usecase-run-notebook.png" alt="Hermes runs the whole notebook with parameters">
+      <figcaption><b>Run the whole notebook</b> with new parameters (<code>run_sales_demo(region="US", year=2026)</code>).</figcaption>
+    </figure>
+    <figure class="win">
+      <div class="bar"><i></i><i></i><i></i><span>Any MCP client</span><em>4 · Client</em></div>
+      <img src="images/hermes-calls-mcp.png" alt="Notebook client code next to the Hermes tool call">
+      <figcaption><b>Any MCP client works.</b> Left: client code in a separate notebook. Right: the Hermes CLI calling the tool.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="arch" class="arch">
+  <div class="kick">Architecture</div>
+  <h2>Functions stay in the notebook</h2>
+  <div class="win">
+    <div class="bar"><i></i><i></i><i></i><span>Notebook → laria-mcp → agent</span></div>
+    <img src="images/architecture.svg" alt="Notebook, laria-mcp server and AI agent">
+    <p>The agent sees them as tools. The package contains no LLM and makes no LLM calls.</p>
+  </div>
+</section>
+
+<section id="status">
+  <div class="kick">Testing and status</div>
+  <h2>Published, tested, demonstrated</h2>
+  <div class="stats">
+    <div class="stat"><b>80</b><span>tests in CI, Python 3.10 · 3.11 · 3.12, on every push to <code>main</code></span></div>
+    <div class="stat"><b>0.1.1</b><span>published on PyPI; installs on the course JupyterHub</span></div>
+    <div class="stat"><b>5</b><span>tools served by the demo notebook</span></div>
+    <div class="stat"><b>MIT</b><span>licensed, public repository and docs site</span></div>
+  </div>
+  <p class="lead" style="margin-top:18px">Verified on a laptop: Hermes calls the notebook's tools and gets the results.</p>
+  <p class="note"><strong>Open item:</strong> on the course JupyterHub the server starts and accepts calls, but the Hermes model installed there does not complete tool calls, so the agent demo was recorded on a laptop.</p>
+</section>
+
+<section id="team">
+  <div class="kick">Team</div>
+  <h2>Group 27</h2>
+  <div class="team"><span>Kerey</span><span>Bibek</span><span>Matthias</span><span>Vladan</span><span>Daniil</span><span>Namlahang</span></div>
+</section>
+
+<footer>laria-mcp · cs1302a · Licensed under the MIT License</footer>
+</div>
+</body>
+</html>
